@@ -13,6 +13,7 @@ import org.yzr.service.AppService;
 import org.yzr.service.PackageService;
 import org.yzr.utils.PathManager;
 import org.yzr.utils.ipa.PlistGenerator;
+import org.yzr.utils.webhook.WebHookClient;
 import org.yzr.vo.AppViewModel;
 import org.yzr.vo.PackageViewModel;
 
@@ -45,6 +46,7 @@ public class PackageController {
         AppViewModel viewModel = this.appService.findByCode(code, id);
         request.setAttribute("app", viewModel);
         request.setAttribute("ca_path", this.pathManager.getCAPath());
+        request.setAttribute("basePath", this.pathManager.getBaseURL(false));
         return "install";
     }
 
@@ -59,6 +61,18 @@ public class PackageController {
         PackageViewModel viewModel= this.packageService.findById(id);
         request.setAttribute("app", viewModel);
         return "devices";
+    }
+
+    /**
+     * 安装教程
+     * @param platform
+     * @param request
+     * @return
+     */
+    @GetMapping("/guide/{platform}")
+    public String guide(@PathVariable("platform") String platform, HttpServletRequest request) {
+        request.setAttribute("platform", platform);
+        return "guide";
     }
 
     /**
@@ -81,6 +95,8 @@ public class PackageController {
             app = this.appService.save(app);
             // URL
             String codeURL = this.pathManager.getBaseURL(false) + "p/code/" + app.getCurrentPackage().getId();
+            // 发送WebHook消息
+            WebHookClient.sendMessage(app, pathManager);
             map.put("code", codeURL);
             map.put("success", true);
         } catch (Exception e) {
@@ -196,6 +212,7 @@ public class PackageController {
             String newFileName = UUID.randomUUID().toString() + "." + ext;
             // 转存到 tmp
             String destPath = FileUtils.getTempDirectoryPath() + File.separator + newFileName;
+            destPath = destPath.replaceAll("//", "/");
             srcFile.transferTo(new File(destPath));
             return destPath;
         } catch (Exception e) {

@@ -5,13 +5,43 @@
 
 #### 效果
 
-样式与 fir 一致，直接扒的，未进行无用样式清理。
+样式与 fir 一致，直接扒的。
+
+##### 首页
 
 ![首页](images/index.jpg)
 
+##### 更新列表
+
 ![首页](images/list.jpg)
 
+##### 基本信息
+
+![](images/list_info.jpg)
+
+##### 钉钉集成
+
+![](images/list_web_hook.jpg)
+
+##### 钉钉机器人消息
+
+![](images/ding_ding.jpg)
+
+##### PC安装页
+
 ![首页](images/install.jpg)
+
+##### 手机安装页
+
+![首页](images/mobile_install.jpg)
+
+##### Jenkins 集成效果
+
+![](images/jenkins_code.jpg)
+
+##### 证书信任设置
+
+![首页](images/install_crt.gif)
 
 #### 安装教程
 
@@ -19,7 +49,7 @@
 
 ##### 数据库
 
->  Mac 下安装 Mysql
+>  Mac 下安装 MySQL
 
 ```shell
 brew install mysql
@@ -42,7 +72,7 @@ create database app_manager DEFAULT CHARSET utf8 COLLATE utf8_general_ci;
 
 ##### 配置
 
- [下载](bin/bin.zip)，解压包。
+ [下载](https://github.com/yizhaorong/intranet_app_manager/releases/download/v1.0.0/release_1.0.0.zip)，解压包。
 
 > 配置 HTTPS
 
@@ -68,7 +98,11 @@ java -jar intranet_app_manager-1.0.0.jar
 
 > 上传与安装
 
-可以将 ipa 或 apk 拖入上传块中进行上传，上传完成后会在列表中展示。iOS 安装需要使用 https 协议，由于内网部署是用的自建证书，需要将 ca 添加到设备的信用列表中才可正常进行安装。
+可以将 ipa 或 apk 拖入上传块中进行上传，上传完成后会在列表中展示。
+
+**注意**
+
+本项目默认采用 http 方式访问，这样可以避免没必要的证书信任。iOS 安装需要使用 https 协议，由于内网部署是用的自建证书，需要将 ca 添加到设备的信用列表中才可正常进行安装。**设置抓包代理会影响自建证书**，导致无法下载。
 
 #### Jenkins 集成 
 

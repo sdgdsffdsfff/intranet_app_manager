@@ -9,6 +9,7 @@ import org.yzr.dao.AppDao;
 import org.yzr.dao.PackageDao;
 import org.yzr.model.App;
 import org.yzr.model.Package;
+import org.yzr.utils.ImageUtils;
 import org.yzr.utils.PathManager;
 import org.yzr.utils.ipa.PlistGenerator;
 import org.yzr.utils.parser.ParserClient;
@@ -38,8 +39,12 @@ public class PackageService {
             String tempIconPath = PathManager.getTempIconPath(aPackage);
             String iconPath = packagePath + File.separator + "icon.png";
             String sourcePath = packagePath + File.separator + fileName;
+            String jpgIconPath = packagePath + File.separator + "icon.jpg";
+
             // 拷贝图标
-            FileUtils.copyFile(new File(tempIconPath), new File(iconPath));
+            ImageUtils.resize(tempIconPath, iconPath, 192, 192);
+            // 生成钉钉发送所需要图片
+            ImageUtils.convertPNGToJPG(iconPath, jpgIconPath, 64, 64);
             // 源文件
             FileUtils.copyFile(new File(filePath), new File(sourcePath));
 
